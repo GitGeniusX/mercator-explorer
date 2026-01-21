@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { AppState } from '@/types'
 import { loadCountries as loadCountriesData } from '@/utils/dataLoader'
-import { calculateSizeAdjustment } from '@/utils/projection'
+import { getDistortionAtLatitude } from '@/utils/projection'
 
 const initialDragState = {
   isDragging: false,
@@ -47,10 +47,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     const country = countries.find((c) => c.id === countryId)
     if (!country) return
 
-    // Calculate scale factor based on latitude change
-    const originalLat = country.properties.centroid[1]
+    // Store the distortion at the new position (for display purposes)
     const newLat = position[1]
-    const scaleFactor = calculateSizeAdjustment(originalLat, newLat)
+    const scaleFactor = getDistortionAtLatitude(newLat)
 
     set({
       placedCountries: [

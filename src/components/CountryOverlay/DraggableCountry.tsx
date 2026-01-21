@@ -2,7 +2,7 @@ import { GeoJSON } from 'react-leaflet'
 import type { PathOptions } from 'leaflet'
 import { useMemo } from 'react'
 import type { Country } from '@/types'
-import { transformCountryToPosition, calculateSizeAdjustment, simplifyGeometry } from '@/utils/projection'
+import { transformCountryToPosition, simplifyGeometry } from '@/utils/projection'
 
 export interface DraggableCountryProps {
   country: Country
@@ -38,7 +38,8 @@ export function DraggableCountry({ country, position, isDragging }: DraggableCou
     return country.geometry
   }, [country.geometry, isDragging])
 
-  // Transform geometry to current position
+  // Transform geometry to current position (translate only, no scaling)
+  // Mercator projection naturally handles the visual size change
   const transformedGeometry = useMemo(() => {
     return transformCountryToPosition(
       workingGeometry,
@@ -46,13 +47,6 @@ export function DraggableCountry({ country, position, isDragging }: DraggableCou
       position
     )
   }, [workingGeometry, country.properties.centroid, position])
-
-  // Calculate current scale factor for info display
-  const scaleFactor = useMemo(() => {
-    const originalLat = country.properties.centroid[1]
-    const currentLat = position[1]
-    return calculateSizeAdjustment(originalLat, currentLat)
-  }, [country.properties.centroid, position])
 
   // Create GeoJSON feature
   const geojsonData: GeoJSON.FeatureCollection = useMemo(() => ({
@@ -64,13 +58,12 @@ export function DraggableCountry({ country, position, isDragging }: DraggableCou
         properties: {
           id: country.id,
           name: country.name,
-          scaleFactor,
           ...country.properties,
         },
         geometry: transformedGeometry,
       },
     ],
-  }), [country.id, country.name, country.properties, transformedGeometry, scaleFactor])
+  }), [country.id, country.name, country.properties, transformedGeometry])
 
   const style = isDragging ? draggedStyle : liftedStyle
 

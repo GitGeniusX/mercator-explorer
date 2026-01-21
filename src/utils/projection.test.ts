@@ -170,8 +170,9 @@ describe('transformCountryToPosition', () => {
     expect(newCentroidLat).toBeCloseTo(0, 1)
   })
 
-  it('scales polygon smaller when moving toward equator', () => {
-    // Moving from lat 60 to equator should shrink by factor of 0.5
+  it('preserves polygon dimensions (no scaling, only translate)', () => {
+    // The function only translates, doesn't scale
+    // Mercator projection handles visual size change
     const highLatPolygon: Polygon = {
       type: 'Polygon',
       coordinates: [
@@ -192,9 +193,13 @@ describe('transformCountryToPosition', () => {
     )
 
     const coords = (result as Polygon).coordinates[0]
-    // Original width was 4 degrees, should be ~2 degrees at equator
+    // Original width was 4 degrees, should STILL be 4 degrees (no scaling)
     const width = Math.abs(coords[1][0] - coords[0][0])
-    expect(width).toBeCloseTo(2, 0) // scale factor ~0.5
+    expect(width).toBeCloseTo(4, 5)
+
+    // Height should also be preserved (2 degrees)
+    const height = Math.abs(coords[2][1] - coords[0][1])
+    expect(height).toBeCloseTo(2, 5)
   })
 
   it('handles MultiPolygon geometries', () => {

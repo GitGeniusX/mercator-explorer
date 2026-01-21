@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { Map } from '@/components/Map'
 import { useAppStore } from '@/stores/appStore'
-import { calculateSizeAdjustment, getAreaComparison, formatArea } from '@/utils/projection'
+import { getDistortionAtLatitude, formatArea } from '@/utils/projection'
 
 function App() {
   const loadCountries = useAppStore((state) => state.loadCountries)
@@ -17,19 +17,33 @@ function App() {
     loadCountries()
   }, [loadCountries])
 
-  // Calculate drag info
+  // Calculate drag info - show distortion at current latitude
   const dragInfo = useMemo(() => {
     if (!selectedCountry || !dragState.currentPos) return null
 
     const originalLat = selectedCountry.properties.centroid[1]
     const currentLat = dragState.currentPos[1]
-    const scaleFactor = calculateSizeAdjustment(originalLat, currentLat)
-    const comparison = getAreaComparison(selectedCountry.properties.area_km2, scaleFactor)
+
+    // Distortion at original and current positions
+    const originalDistortion = getDistortionAtLatitude(originalLat)
+    const currentDistortion = getDistortionAtLatitude(currentLat)
+
+    // How the country appears relative to true size at current position
+    let comparison: string
+    if (currentDistortion > 1.1) {
+      comparison = `appears ${currentDistortion.toFixed(1)}x larger than true size`
+    } else if (currentDistortion < 0.9) {
+      comparison = `appears ${(1 / currentDistortion).toFixed(1)}x smaller than true size`
+    } else {
+      comparison = 'shown at approximately true size'
+    }
 
     return {
-      scaleFactor,
+      originalDistortion,
+      currentDistortion,
       comparison,
       currentLat,
+      originalLat,
     }
   }, [selectedCountry, dragState.currentPos])
 
@@ -74,13 +88,18 @@ function App() {
                 {dragInfo.comparison}
               </p>
               <p className="text-gray-500 text-xs mt-1">
-                Scale: {dragInfo.scaleFactor.toFixed(2)}x
+                Original: {dragInfo.originalDistortion.toFixed(1)}x distortion at {dragInfo.originalLat.toFixed(0)}°
               </p>
             </div>
           ) : (
-            <p className="text-blue-600 text-sm mt-2">
-              Click and drag to move to a new latitude
-            </p>
+            <div className="mt-2">
+              <p className="text-gray-500 text-xs">
+                At {selectedCountry.properties.centroid[1].toFixed(0)}° lat: {getDistortionAtLatitude(selectedCountry.properties.centroid[1]).toFixed(1)}x distortion
+              </p>
+              <p className="text-blue-600 text-sm mt-1">
+                Drag to equator to see true size
+              </p>
+            </div>
           )}
         </div>
       )}
@@ -98,14 +117,18 @@ function App() {
             </button>
           </div>
           <div className="space-y-2 max-h-60 overflow-y-auto">
-            {placedCountries.map((placed, i) => (
-              <div key={i} className="text-sm border-b border-gray-100 pb-2 last:border-0">
-                <p className="font-medium text-green-700">{placed.original.name}</p>
-                <p className="text-gray-500 text-xs">
-                  At {placed.currentPosition[1].toFixed(1)}° lat • Scale: {placed.scaleFactor.toFixed(2)}x
-                </p>
-              </div>
-            ))}
+            {placedCountries.map((placed, i) => {
+              const distortion = getDistortionAtLatitude(placed.currentPosition[1])
+              return (
+                <div key={i} className="text-sm border-b border-gray-100 pb-2 last:border-0">
+                  <p className="font-medium text-green-700">{placed.original.name}</p>
+                  <p className="text-gray-500 text-xs">
+                    At {placed.currentPosition[1].toFixed(1)}° lat
+                    {distortion < 1.1 ? ' (true size)' : ` (${distortion.toFixed(1)}x distortion)`}
+                  </p>
+                </div>
+              )
+            })}
           </div>
         </div>
       )}

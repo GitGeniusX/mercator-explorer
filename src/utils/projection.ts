@@ -74,13 +74,13 @@ export function getAreaComparison(
 }
 
 /**
- * Transform a GeoJSON geometry to appear at a new location
- * with correct size adjustment for Mercator projection.
+ * Transform a GeoJSON geometry to appear at a new location.
  *
- * Steps:
- * 1. Calculate size adjustment factor between latitudes
- * 2. Scale geometry around its centroid
- * 3. Translate to new position
+ * IMPORTANT: We only TRANSLATE the geometry, we do NOT scale it.
+ * The Mercator projection naturally handles the size change:
+ * - At high latitudes, Mercator stretches countries (making them appear larger)
+ * - At the equator, there's no distortion
+ * - By moving a country without scaling, Mercator shows its "true" relative size
  *
  * @param geometry - Original GeoJSON geometry (Polygon or MultiPolygon)
  * @param originalCentroid - Original centroid [lng, lat]
@@ -100,21 +100,14 @@ export function transformCountryToPosition(
   const [origLng, origLat] = originalCentroid
   const [newLng, newLat] = newPosition
 
-  // Calculate scale adjustment
-  const scaleFactor = calculateSizeAdjustment(origLat, newLat)
-
-  // Calculate translation offset
+  // Calculate translation offset (NO scaling - let Mercator handle size)
   const deltaLng = newLng - origLng
   const deltaLat = newLat - origLat
 
-  // Transform coordinates
+  // Transform coordinates - translate only
   const transformCoord = (coord: Position): Position => {
     const [lng, lat] = coord
-    // Scale around original centroid
-    const scaledLng = origLng + (lng - origLng) * scaleFactor
-    const scaledLat = origLat + (lat - origLat) * scaleFactor
-    // Translate to new position
-    return [scaledLng + deltaLng, scaledLat + deltaLat]
+    return [lng + deltaLng, lat + deltaLat]
   }
 
   const transformRing = (ring: Position[]): Position[] => {
