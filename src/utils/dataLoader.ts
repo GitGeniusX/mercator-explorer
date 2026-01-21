@@ -56,6 +56,7 @@ function processFeature(
   return {
     id: properties.ADM0_A3,
     name: properties.NAME || properties.ADMIN,
+    isoCode: properties.ADM0_A3,
     geometry: geometry as Geometry,
     properties: {
       area_km2: areaKm2,

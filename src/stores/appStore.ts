@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import type { AppState } from '@/types'
+import type { AppState, AnimationState } from '@/types'
+import type { Preset } from '@/data/presets'
 import { loadCountries as loadCountriesData } from '@/utils/dataLoader'
 import { getDistortionAtLatitude } from '@/utils/projection'
 
@@ -7,6 +8,14 @@ const initialDragState = {
   isDragging: false,
   countryId: null,
   currentPos: null,
+}
+
+const initialAnimationState: AnimationState = {
+  isAnimating: false,
+  countryId: null,
+  startPos: null,
+  endPos: null,
+  progress: 0,
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -17,6 +26,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   selectedCountry: null,
   placedCountries: [],
   dragState: initialDragState,
+  animationState: initialAnimationState,
+  activePreset: null,
 
   // Actions
   loadCountries: async () => {
@@ -36,6 +47,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { countries } = get()
     const country = countries.find((c) => c.id === id) ?? null
     set({ selectedCountry: country })
+  },
+
+  selectCountryByCode: (isoCode: string) => {
+    const { countries } = get()
+    const country = countries.find((c) => c.isoCode === isoCode) ?? null
+    if (country) {
+      set({ selectedCountry: country })
+    }
+    return country
   },
 
   clearSelection: () => {
@@ -88,6 +108,46 @@ export const useAppStore = create<AppState>((set, get) => ({
       selectedCountry: null,
       placedCountries: [],
       dragState: initialDragState,
+      animationState: initialAnimationState,
+      activePreset: null,
     })
+  },
+
+  // Animation actions for preset demos
+  startAnimation: (countryId: string, endPos: [number, number]) => {
+    const { countries } = get()
+    const country = countries.find((c) => c.id === countryId)
+    if (!country) return
+
+    const startPos = country.properties.centroid
+    set({
+      selectedCountry: country,
+      animationState: {
+        isAnimating: true,
+        countryId,
+        startPos,
+        endPos,
+        progress: 0,
+      },
+    })
+  },
+
+  updateAnimationProgress: (progress: number) => {
+    set((state) => ({
+      animationState: { ...state.animationState, progress: Math.min(1, progress) },
+    }))
+  },
+
+  endAnimation: () => {
+    const { animationState, selectedCountry } = get()
+    if (selectedCountry && animationState.endPos) {
+      // Place the country at the final position
+      get().placeCountry(selectedCountry.id, animationState.endPos)
+    }
+    set({ animationState: initialAnimationState })
+  },
+
+  setActivePreset: (preset: Preset | null) => {
+    set({ activePreset: preset })
   },
 }))

@@ -32,6 +32,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Placed countries panel with reset functionality
 - Escape key to cancel drag operation
 - CSS styles for lifted/dragged/ghost country effects
+- InfoPanel component with detailed statistics
+- ComparisonCard component for side-by-side position comparison
+- LatitudeIndicator component for real-time drag feedback
+- StatsOverlay component with session statistics and fun facts
+- PresetSelector component with 8 educational preset comparisons
+- usePresetAnimation hook for smooth preset demonstrations
+- Animation state management in Zustand store
+- ISO code tracking for preset country matching
 
 ### Changed
 - N/A
@@ -195,3 +203,69 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Create InfoPanel component
 - Add preset comparisons (Greenland vs Africa, etc.)
 - Create LatitudeIndicator component
+
+### Session 5 - 2026-01-21
+**Phase:** 4 - Information Display
+
+**Completed:**
+- Created InfoPanel component
+  - Displays true area, distortion info, continent
+  - Shows similar-sized countries list
+  - Visual scale bar comparing true vs displayed size
+  - Updates in real-time during drag/animation
+- Created ComparisonCard component
+  - Side-by-side view of original vs new position
+  - Shows latitude change and distortion reduction
+  - Remove button for each placed country
+- Created LatitudeIndicator component
+  - Centered at bottom of screen during drag
+  - Shows current latitude with hemisphere indicator
+  - Color-coded distortion status (green/yellow/orange/red)
+  - Direction hints toward equator
+- Created StatsOverlay component
+  - Session statistics (countries placed, true size reveals)
+  - "Distortion removed" metric showing area saved
+  - Rotating fun facts about Mercator distortion
+  - Reset all button
+- Created PresetSelector component
+  - 8 preset comparisons with emoji icons
+  - Filters to show only available countries in data
+  - Click to animate country to target latitude
+- Created preset comparisons data
+  - Greenland Reality Check
+  - Alaska vs Brazil
+  - Russia at the Equator
+  - Africa is Massive
+  - Scandinavian Surprise
+  - Things That Fit in Australia
+  - Canada Reality
+  - Antarctica Distortion
+- Created usePresetAnimation hook
+  - Smooth animation with ease-out-cubic easing
+  - Uses requestAnimationFrame for 60fps
+  - Coordinates with Zustand store
+- Updated types and store
+  - Added AnimationState interface
+  - Added isoCode to Country type
+  - Added animation and preset actions to store
+- Updated InteractiveOverlay
+  - Now handles both drag and animation states
+  - Calculates interpolated position during animation
+- Completely rewrote App.tsx
+  - Integrated all new info components
+  - Shows PresetSelector when no country selected
+  - Shows active preset facts during demo
+  - Clean layout with left/right panels
+
+**Notes:**
+- All 47 tests pass
+- TypeScript compiles without errors
+- Build succeeds (1.2MB bundle warning expected)
+- All Phase 4 acceptance criteria met
+
+**Next Session Should:**
+- Begin Phase 5: Polish & UX
+- Create welcome/tutorial overlay
+- Add smooth animations for transitions
+- Implement keyboard shortcuts (R, Z, ?)
+- Add shareable state via URL parameters

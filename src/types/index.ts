@@ -1,8 +1,10 @@
 import type { Geometry } from 'geojson'
+import type { Preset } from '@/data/presets'
 
 export interface Country {
   id: string
   name: string
+  isoCode: string // ADM0_A3 code for preset matching
   geometry: Geometry
   properties: {
     area_km2: number
@@ -23,6 +25,14 @@ export interface DragState {
   currentPos: [number, number] | null
 }
 
+export interface AnimationState {
+  isAnimating: boolean
+  countryId: string | null
+  startPos: [number, number] | null
+  endPos: [number, number] | null
+  progress: number // 0 to 1
+}
+
 export interface AppState {
   // Data
   countries: Country[]
@@ -38,9 +48,16 @@ export interface AppState {
   // Drag state
   dragState: DragState
 
+  // Animation state (for preset demos)
+  animationState: AnimationState
+
+  // Active preset
+  activePreset: Preset | null
+
   // Actions
   loadCountries: () => Promise<void>
   selectCountry: (id: string) => void
+  selectCountryByCode: (isoCode: string) => Country | null
   clearSelection: () => void
   placeCountry: (countryId: string, position: [number, number]) => void
   removePlacedCountry: (index: number) => void
@@ -48,4 +65,9 @@ export interface AppState {
   updateDragPosition: (pos: [number, number]) => void
   endDrag: () => void
   reset: () => void
+  // Preset/animation actions
+  startAnimation: (countryId: string, endPos: [number, number]) => void
+  updateAnimationProgress: (progress: number) => void
+  endAnimation: () => void
+  setActivePreset: (preset: Preset | null) => void
 }

@@ -259,24 +259,28 @@ describe('findSimilarSizedCountries', () => {
     {
       id: 'A',
       name: 'Country A',
+      isoCode: 'AAA',
       geometry: { type: 'Point', coordinates: [0, 0] },
       properties: { area_km2: 1000000, centroid: [0, 0], continent: 'Test' },
     },
     {
       id: 'B',
       name: 'Country B',
+      isoCode: 'BBB',
       geometry: { type: 'Point', coordinates: [0, 0] },
       properties: { area_km2: 1100000, centroid: [0, 0], continent: 'Test' },
     },
     {
       id: 'C',
       name: 'Country C',
+      isoCode: 'CCC',
       geometry: { type: 'Point', coordinates: [0, 0] },
       properties: { area_km2: 2000000, centroid: [0, 0], continent: 'Test' },
     },
     {
       id: 'D',
       name: 'Country D',
+      isoCode: 'DDD',
       geometry: { type: 'Point', coordinates: [0, 0] },
       properties: { area_km2: 1050000, centroid: [0, 0], continent: 'Test' },
     },

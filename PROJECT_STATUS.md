@@ -1,27 +1,37 @@
 # Project Status
 
-## Current Phase: Phase 3 - Drag & Drop Interaction ✅ COMPLETE
+## Current Phase: Phase 4 - Information Display ✅ COMPLETE
 ## Last Updated: 2026-01-21
-## Overall Progress: 8/8 tasks complete
+## Overall Progress: 7/7 tasks complete
 
 ### Completed This Session
-- [x] 3.1 Create DraggableCountry component with Leaflet polygon rendering
-- [x] 3.2 Implement drag state management (update placeCountry with scale calculation)
-- [x] 3.3 Create "lift" animation on selection (CSS shadow effects)
-- [x] 3.4 Implement real-time resize during drag with mouse events
-- [x] 3.5 Handle drag end - place country at final position
-- [x] 3.6 Implement "ghost" display for original position
-- [x] 3.7 Add touch support for mobile devices
-- [x] 3.8 Performance optimization with polygon simplification
+- [x] 4.1 Create InfoPanel component with detailed statistics
+- [x] 4.2 Create ComparisonCard component for side-by-side comparison
+- [x] 4.3 Create LatitudeIndicator component for drag feedback
+- [x] 4.4 Create StatsOverlay component with session stats
+- [x] 4.5 Add preset comparisons data (Greenland vs Africa, etc.)
+- [x] 4.6 Implement preset loading with animation
+- [x] 4.7 Style all info components and integrate into App
 
 ### Additional Features Implemented
-- `InteractiveOverlay` component - renders draggable, placed, and ghost countries
-- `DragHandler` component - handles mouse and touch events
-- `useDragInteraction` hook - manages drag state and map interactions
-- `simplifyGeometry` utility - Douglas-Peucker simplification during drag
-- Real-time info panel showing latitude, scale factor, and size comparison
-- Placed countries panel with reset functionality
-- Escape key to cancel drag
+- `InfoPanel` - Detailed country statistics with true area, distortion info, similar-sized countries
+- `ComparisonCard` - Side-by-side comparison showing original vs new position
+- `LatitudeIndicator` - Real-time feedback during drag showing latitude and distortion
+- `StatsOverlay` - Session statistics with fun facts about Mercator distortion
+- `PresetSelector` - Preset comparison selector with 8 educational presets
+- `usePresetAnimation` hook - Smooth animation for preset demonstrations
+- Animation state in store for coordinated preset playback
+- ISO code tracking for country lookup by preset
+
+### Preset Comparisons Available
+1. Greenland Reality Check - Shows true size at equator
+2. Alaska vs Brazil - Size comparison
+3. Russia at the Equator - Largest country adjusted
+4. Africa is Massive - Comparing countries that fit inside
+5. Scandinavian Surprise - Northern distortion demo
+6. Things That Fit in Australia - Size perspective
+7. Canada Reality - Second-largest country adjusted
+8. Antarctica Distortion - Extreme polar example
 
 ### In Progress
 - None
@@ -30,46 +40,48 @@
 - None
 
 ### Next Actions
-1. Begin Phase 4: Information Display
-2. Create InfoPanel component with detailed statistics
-3. Add preset comparisons (Greenland vs Africa, etc.)
-4. Create LatitudeIndicator component
+1. Begin Phase 5: Polish & UX
+2. Create welcome/tutorial overlay
+3. Add smooth animations
+4. Implement keyboard shortcuts
+5. Add shareable state via URL
 
 ### Acceptance Criteria Status
-- [x] Clicking a country "lifts" it visually (amber highlight + shadow)
-- [x] Dragging is smooth (60fps with requestAnimationFrame throttling)
-- [x] Country resizes in real-time based on latitude
-- [x] Releasing places the country at new position
-- [x] Original position shows ghost outline (dashed gray)
-- [x] Works on touch devices (touch events handled)
-- [x] No performance issues with multiple placed countries (polygon simplification)
+- [x] InfoPanel displays accurate statistics
+- [x] Information updates in real-time during drag
+- [x] Preset comparisons work correctly
+- [x] UI is readable and non-intrusive
+- [x] All text is educational and clear
+- [x] Responsive on mobile devices (Tailwind responsive classes)
 
 ### Architecture Decisions
-- Used react-leaflet's GeoJSON component with unique keys for re-renders
-- Custom drag implementation using Leaflet's mouseEventToContainerPoint
-- Separate components for Draggable, Ghost, and Placed countries
-- Polygon simplification using turf.simplify during drag for performance
+- Used Zustand for animation state management
+- Preset data stored separately in `src/data/presets.ts`
+- Animation uses requestAnimationFrame with ease-out-cubic easing
+- ISO A3 codes used for country identification in presets
+- Components are modular and reusable
 
 ### Test Status
 - All 47 existing tests pass
 - Projection math tested with < 0.01% error margin
 - Data loading tested with 12 tests
-- (Integration tests for drag interaction to be added in Phase 6)
+- Added isoCode to Country type for preset matching
 
 ### Files Added/Modified
 **New Files:**
-- `src/components/CountryOverlay/DraggableCountry.tsx`
-- `src/components/CountryOverlay/GhostCountry.tsx`
-- `src/components/CountryOverlay/PlacedCountry.tsx`
-- `src/components/CountryOverlay/index.ts`
-- `src/components/Map/DragHandler.tsx`
-- `src/components/Map/InteractiveOverlay.tsx`
-- `src/hooks/useDragInteraction.ts`
+- `src/components/InfoPanel/InfoPanel.tsx`
+- `src/components/InfoPanel/ComparisonCard.tsx`
+- `src/components/InfoPanel/LatitudeIndicator.tsx`
+- `src/components/InfoPanel/StatsOverlay.tsx`
+- `src/components/InfoPanel/PresetSelector.tsx`
+- `src/components/InfoPanel/index.ts`
+- `src/data/presets.ts`
+- `src/hooks/usePresetAnimation.ts`
 
 **Modified Files:**
-- `src/components/Map/Map.tsx` - Added DragHandler and InteractiveOverlay
-- `src/components/Map/index.ts` - Export new components
-- `src/stores/appStore.ts` - Added calculateSizeAdjustment import
-- `src/utils/projection.ts` - Added simplifyGeometry function
-- `src/index.css` - Added country overlay CSS styles
-- `src/App.tsx` - Added drag info panel and placed countries list
+- `src/types/index.ts` - Added AnimationState, isoCode, preset-related actions
+- `src/stores/appStore.ts` - Added animation state and preset actions
+- `src/utils/dataLoader.ts` - Added isoCode to country extraction
+- `src/components/Map/InteractiveOverlay.tsx` - Added animation support
+- `src/App.tsx` - Complete rewrite with new info components
+- `src/utils/projection.test.ts` - Added isoCode to mock countries
