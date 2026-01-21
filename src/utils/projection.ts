@@ -5,7 +5,8 @@
  * Mercator projection distortion.
  */
 
-import type { Geometry, Position, Polygon, MultiPolygon } from 'geojson'
+import type { Geometry, Position, Polygon, MultiPolygon, Feature } from 'geojson'
+import * as turf from '@turf/turf'
 import type { Country } from '../types'
 
 /** Maximum latitude to avoid infinity at poles */
@@ -193,4 +194,34 @@ export function formatArea(areaKm2: number): string {
     return `${Math.round(areaKm2).toLocaleString()} km²`
   }
   return `${areaKm2.toFixed(0)} km²`
+}
+
+/**
+ * Simplify a geometry using Douglas-Peucker algorithm.
+ * Useful for performance optimization during drag operations.
+ *
+ * @param geometry - GeoJSON geometry to simplify
+ * @param tolerance - Simplification tolerance (higher = more simplified)
+ * @returns Simplified geometry
+ */
+export function simplifyGeometry(
+  geometry: Geometry,
+  tolerance: number = 0.1
+): Geometry {
+  if (geometry.type !== 'Polygon' && geometry.type !== 'MultiPolygon') {
+    return geometry
+  }
+
+  const feature: Feature = {
+    type: 'Feature',
+    properties: {},
+    geometry,
+  }
+
+  const simplified = turf.simplify(feature, {
+    tolerance,
+    highQuality: false, // Faster, less accurate during drag
+  })
+
+  return simplified.geometry
 }

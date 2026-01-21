@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { AppState } from '@/types'
 import { loadCountries as loadCountriesData } from '@/utils/dataLoader'
+import { calculateSizeAdjustment } from '@/utils/projection'
 
 const initialDragState = {
   isDragging: false,
@@ -46,8 +47,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     const country = countries.find((c) => c.id === countryId)
     if (!country) return
 
-    // TODO(phase-2): Calculate actual scale factor based on latitude
-    const scaleFactor = 1
+    // Calculate scale factor based on latitude change
+    const originalLat = country.properties.centroid[1]
+    const newLat = position[1]
+    const scaleFactor = calculateSizeAdjustment(originalLat, newLat)
 
     set({
       placedCountries: [

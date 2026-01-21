@@ -3,6 +3,8 @@ import type { Map as LeafletMap } from 'leaflet'
 import { useRef } from 'react'
 import 'leaflet/dist/leaflet.css'
 import { CountryLayer } from './CountryLayer'
+import { DragHandler } from './DragHandler'
+import { InteractiveOverlay } from './InteractiveOverlay'
 
 // World bounds for initial view
 const WORLD_CENTER: [number, number] = [20, 0] // Slightly north for better view
@@ -37,6 +39,8 @@ export function Map({ className }: MapProps) {
       />
       <ZoomControl position="bottomright" />
       <CountryLayer />
+      <InteractiveOverlay />
+      <DragHandler />
     </MapContainer>
   )
 }

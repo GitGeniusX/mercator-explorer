@@ -21,6 +21,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - CountryLayer component with hover/click interactions
 - Info overlay showing selected country details
 - Comprehensive tests for data loading (12 tests)
+- DraggableCountry component with real-time resize during drag
+- GhostCountry component showing original position
+- PlacedCountry component for countries at new positions
+- InteractiveOverlay orchestrating all draggable/placed countries
+- DragHandler component with mouse and touch support
+- useDragInteraction hook managing drag state
+- simplifyGeometry function for performance during drag
+- Real-time info panel with scale factor and comparison text
+- Placed countries panel with reset functionality
+- Escape key to cancel drag operation
+- CSS styles for lifted/dragged/ghost country effects
 
 ### Changed
 - N/A
@@ -132,3 +143,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Begin Phase 3: Drag & Drop Interaction
 - Create DraggableCountry component
 - Implement drag state management
+
+### Session 4 - 2026-01-21
+**Phase:** 3 - Drag & Drop Interaction
+
+**Completed:**
+- Created DraggableCountry component
+  - Renders country at current drag position
+  - Transforms geometry using projection math
+  - Uses simplified geometry during drag for performance
+  - Amber color scheme for visibility
+- Created GhostCountry component
+  - Shows original position with dashed gray outline
+  - Non-interactive (pointer-events: none)
+- Created PlacedCountry component
+  - Renders countries at their placed positions
+  - Green color scheme
+  - Click to remove, tooltip on hover
+- Created InteractiveOverlay component
+  - Orchestrates rendering of all overlay layers
+  - Manages ghosts, placed countries, and dragged country
+- Created DragHandler component
+  - Handles mouse events (mousedown, mousemove, mouseup)
+  - Disables map dragging during country drag
+  - Updates cursor style
+- Created useDragInteraction hook
+  - Manages drag state with requestAnimationFrame throttling
+  - Touch event support (touchstart, touchmove, touchend)
+  - Escape key to cancel drag
+- Added simplifyGeometry function
+  - Uses turf.simplify for Douglas-Peucker algorithm
+  - Reduces polygon complexity during drag
+- Updated App component
+  - Real-time info panel showing latitude and scale during drag
+  - Placed countries panel with reset button
+  - Status bar updated to show instructions
+- Updated placeCountry in store
+  - Now calculates actual scale factor using projection math
+- Added CSS for visual effects
+  - Drop shadow on lifted/dragged countries
+  - Smooth transitions
+
+**Notes:**
+- All 47 tests still pass
+- TypeScript compiles without errors
+- Dev server runs successfully
+- All Phase 3 acceptance criteria met
+
+**Next Session Should:**
+- Begin Phase 4: Information Display
+- Create InfoPanel component
+- Add preset comparisons (Greenland vs Africa, etc.)
+- Create LatitudeIndicator component
