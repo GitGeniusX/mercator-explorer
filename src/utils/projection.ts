@@ -74,13 +74,21 @@ export function getAreaComparison(
 }
 
 /**
- * Transform a GeoJSON geometry to appear at a new location.
+ * Transform a GeoJSON geometry to appear at a new location
+ * with correct size adjustment for Mercator projection.
  *
- * IMPORTANT: We only TRANSLATE the geometry, we do NOT scale it.
- * The Mercator projection naturally handles the size change:
- * - At high latitudes, Mercator stretches countries (making them appear larger)
- * - At the equator, there's no distortion
- * - By moving a country without scaling, Mercator shows its "true" relative size
+ * Mercator distortion works differently for each axis:
+ * - Longitude (X): Linear on map - same pixel width at all latitudes
+ * - Latitude (Y): Nonlinear - stretched more at high latitudes
+ *
+ * When translating a country:
+ * - Y-axis: Mercator's nonlinear formula automatically adjusts the visual height
+ * - X-axis: We must scale longitude to remove the E-W exaggeration
+ *
+ * Scale factor for longitude: cos(origLat) / cos(newLat)
+ * - Moving from 72°N to equator: scale by cos(72°)/cos(0°) ≈ 0.31
+ * - This shrinks the width to match the natural height reduction
+ * - Result: shape preserved, area shows true relative size
  *
  * @param geometry - Original GeoJSON geometry (Polygon or MultiPolygon)
  * @param originalCentroid - Original centroid [lng, lat]
@@ -100,14 +108,28 @@ export function transformCountryToPosition(
   const [origLng, origLat] = originalCentroid
   const [newLng, newLat] = newPosition
 
-  // Calculate translation offset (NO scaling - let Mercator handle size)
+  // Calculate longitude scale factor to compensate for E-W Mercator exaggeration
+  // cos(lat) gives the ratio of real distance per degree longitude at that latitude
+  const origCos = Math.cos((Math.abs(origLat) * Math.PI) / 180)
+  const newCos = Math.cos((Math.abs(newLat) * Math.PI) / 180)
+
+  // Clamp to avoid division issues near poles
+  const lngScaleFactor = Math.max(0.01, origCos) / Math.max(0.01, newCos)
+
+  // Calculate translation offset
   const deltaLng = newLng - origLng
   const deltaLat = newLat - origLat
 
-  // Transform coordinates - translate only
+  // Transform coordinates:
+  // - Scale longitude around centroid to adjust for E-W Mercator distortion
+  // - Translate to new position
+  // - Latitude is NOT scaled (Mercator Y-formula handles it)
   const transformCoord = (coord: Position): Position => {
     const [lng, lat] = coord
-    return [lng + deltaLng, lat + deltaLat]
+    // Scale longitude around original centroid
+    const scaledLng = origLng + (lng - origLng) * lngScaleFactor
+    // Translate to new position
+    return [scaledLng + deltaLng, lat + deltaLat]
   }
 
   const transformRing = (ring: Position[]): Position[] => {
