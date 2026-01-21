@@ -85,6 +85,20 @@ Example: [PHASE-1] feat: implement country selection highlight
 3. **Date line wrapping:** Countries near 180° longitude need clamping/wrapping logic
 4. **Antarctica:** Exclude from interactive features or cap at 85° latitude
 
+## Learnings
+
+### TypeScript Configuration
+- `erasableSyntaxOnly` and `noUncheckedSideEffectImports` are not available in TS 5.7 - don't use these options
+- Keep tsconfig.json conservative with well-established options
+
+### Vite Project Init
+- `npm create vite@latest .` in non-empty directory requires interactive confirmation - fails in automation
+- Solution: Manually create `package.json`, `tsconfig.json`, `vite.config.ts`, `index.html`, and `src/` files
+
+### macOS Shell
+- No `timeout` command available by default
+- Use pattern: `command & sleep N; kill $!` for timed process testing
+
 ## Tailwind v4 Setup
 
 Uses `@tailwindcss/vite` plugin (not PostCSS). Configuration is CSS-first:
