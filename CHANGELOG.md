@@ -15,6 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Data loading utilities skeleton
 - GitHub Actions CI workflow
 - Project status tracking files
+- Natural Earth 110m GeoJSON data (177 countries)
+- Data loading utility with Turf.js (centroid, area calculations)
+- Map component with Leaflet + React-Leaflet
+- CountryLayer component with hover/click interactions
+- Info overlay showing selected country details
+- Comprehensive tests for data loading (12 tests)
 
 ### Changed
 - N/A
@@ -54,3 +60,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Begin Phase 1: Core Map & Data
 - Download Natural Earth GeoJSON data
 - Implement base Map component
+
+### Session 2 - 2026-01-21
+**Phase:** 1 - Core Map & Data
+
+**Completed:**
+- Downloaded Natural Earth 110m GeoJSON data (177 countries, ~820KB)
+- Implemented data loading utility with Turf.js
+  - Centroid calculation using turf.centroid()
+  - Area calculation using turf.area()
+  - Helper functions: findSimilarSizedCountries, getCountryById, getCountriesByArea
+- Created Map component with Leaflet + React-Leaflet
+  - Full viewport map with CartoDB light tiles (no labels)
+  - Zoom controls positioned bottom-right
+- Created CountryLayer component
+  - Renders all countries as GeoJSON
+  - Hover effect with highlight color
+  - Click to select country
+  - Logs country name to console
+- Updated Zustand store to use actual data loader
+- Wired up App component
+  - Loads countries on mount
+  - Shows loading spinner while loading
+  - Shows error state if load fails
+  - Info overlay displays selected country details
+  - Status bar shows country count
+- Added comprehensive tests for data loading (12 new tests, 22 total)
+
+**Notes:**
+- Natural Earth 110m is coarse resolution; smallest country is Luxembourg
+- Bundle size warning (1.2MB) due to GeoJSON data being bundled
+- All acceptance criteria met for Phase 1
+
+**Next Session Should:**
+- Begin Phase 2: Projection Mathematics
+- Implement full Mercator scale calculations
+- Implement polygon transformation function

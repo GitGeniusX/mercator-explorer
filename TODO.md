@@ -6,34 +6,40 @@ All tasks completed.
 
 ---
 
-## Phase 1: Core Map & Data (Next)
+## Phase 1: Core Map & Data ✅ COMPLETE
+
+All tasks completed:
+- [x] Download Natural Earth 110m GeoJSON data
+- [x] Define and validate TypeScript types
+- [x] Create data loading utility with Turf.js
+- [x] Implement base Map component
+- [x] Implement CountryLayer component with hover/click
+- [x] Wire up Zustand store with data loading
+- [x] Wire up App component
+- [x] Write tests for data loading
+
+---
+
+## Phase 2: Projection Math (Next)
 
 ### High Priority
-- [ ] Download Natural Earth 110m GeoJSON data
-- [ ] Define and validate TypeScript types
-- [ ] Create data loading utility with Turf.js
-- [ ] Implement base Map component
+- [ ] Implement full Mercator scale calculations (expand skeleton from Phase 0)
+- [ ] Implement polygon transformation function
+- [ ] Implement area comparison utilities
 
 ### Medium Priority
-- [ ] Implement CountryLayer component with hover/click
-- [ ] Wire up Zustand store with data loading
-- [ ] Write tests for data loading
+- [ ] Comprehensive unit tests with edge cases
+- [ ] Test transformations with real country geometries
 
 ### Acceptance Criteria
-- [ ] World map displays with all country boundaries
-- [ ] Countries highlight on mouse hover
-- [ ] Clicking a country logs its name to console
-- [ ] Country data includes calculated area and centroid
-- [ ] All tests pass
+- [ ] All projection math functions implemented
+- [ ] Unit tests cover edge cases (poles, equator, negative latitudes)
+- [ ] Tests pass with < 0.01% error margin
+- [ ] Functions handle invalid inputs gracefully
 
 ---
 
 ## Backlog (Future Phases)
-
-### Phase 2: Projection Math
-- [ ] Implement full Mercator scale calculations
-- [ ] Implement polygon transformation functions
-- [ ] Comprehensive unit tests
 
 ### Phase 3: Drag & Drop
 - [ ] Draggable country component
@@ -56,7 +62,7 @@ All tasks completed.
 - [ ] README and documentation
 
 ### Phase 7: Deployment
-- [ ] Production build optimization
+- [ ] Production build optimization (code splitting for GeoJSON)
 - [ ] Deploy to Vercel/Netlify
 
 (See mercator-explorer-spec.md for full task details)
@@ -64,7 +70,8 @@ All tasks completed.
 ---
 
 ## Known Issues
-- None yet
+- Bundle size warning (1.2MB JS chunk with GeoJSON data)
 
 ## Technical Debt
-- None yet
+- Consider lazy loading GeoJSON data
+- Consider code splitting for Turf.js

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { AppState } from '@/types'
+import { loadCountries as loadCountriesData } from '@/utils/dataLoader'
 
 const initialDragState = {
   isDragging: false,
@@ -20,8 +21,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   loadCountries: async () => {
     set({ isLoading: true, error: null })
     try {
-      // TODO(phase-1): Implement actual data loading
-      set({ countries: [], isLoading: false })
+      const countries = await loadCountriesData()
+      set({ countries, isLoading: false })
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to load countries',

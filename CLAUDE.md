@@ -99,6 +99,32 @@ Example: [PHASE-1] feat: implement country selection highlight
 - No `timeout` command available by default
 - Use pattern: `command & sleep N; kill $!` for timed process testing
 
+### JSON Imports with TypeScript
+- Complex GeoJSON with strict typing requires double cast: `as unknown as FeatureCollection<...>`
+- TypeScript infers very specific types from JSON (e.g., `number[]` not `BBox`) causing type mismatches
+
+### Natural Earth 110m Data
+- Contains 177 countries (not all territories/micro-states)
+- Smallest country: Luxembourg (~2,400 km²) - no Vatican, Monaco, San Marino
+- Properties available: `NAME`, `ADMIN`, `ADM0_A3` (ISO code), `CONTINENT`
+- File size: ~820KB - contributes to 1.2MB bundle warning
+- Consider lazy loading or code splitting for production
+
+### Turf.js Usage
+- `turf.area(feature)` returns square meters - divide by 1,000,000 for km²
+- `turf.centroid(feature)` returns a Point Feature, access coords via `.geometry.coordinates`
+- Import as `import * as turf from '@turf/turf'` for tree-shaking
+
+### React-Leaflet Patterns
+- Must import Leaflet CSS: `import 'leaflet/dist/leaflet.css'` in Map component
+- GeoJSON component needs unique `key` prop to force re-render on style changes
+- Use `key={\`countries-${hoveredId}-${selectedId}\`}` pattern for hover/select updates
+- `worldCopyJump={true}` improves UX when panning across date line
+
+### Leaflet Styling
+- Use CartoDB tiles for clean look: `https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png`
+- z-index for overlays on Leaflet: use `z-[1000]` or higher in Tailwind
+
 ## Tailwind v4 Setup
 
 Uses `@tailwindcss/vite` plugin (not PostCSS). Configuration is CSS-first:
