@@ -6,7 +6,7 @@ When starting the project, run these commands to initialize the repository:
 
 ```bash
 # Clone the repo (user will have created this)
-git clone https://github.com/[username]/mercator-explorer.git
+git clone https://github.com/GitGeniusX/mercator-explorer.git
 cd mercator-explorer
 
 # Initialize the project
