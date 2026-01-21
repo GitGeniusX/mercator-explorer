@@ -22,7 +22,6 @@ export function usePresetAnimation() {
   const startAnimation = useAppStore((state) => state.startAnimation)
   const updateAnimationProgress = useAppStore((state) => state.updateAnimationProgress)
   const endAnimation = useAppStore((state) => state.endAnimation)
-  const selectCountryByCode = useAppStore((state) => state.selectCountryByCode)
   const setActivePreset = useAppStore((state) => state.setActivePreset)
   const countries = useAppStore((state) => state.countries)
 
@@ -68,27 +67,27 @@ export function usePresetAnimation() {
     cancelAnimation()
     setActivePreset(preset)
 
-    // Find the first available country from the preset
-    const countryCode = preset.countries.find((code) =>
-      countries.some((c) => c.isoCode === code)
+    // Find the first available country from the preset (by ID)
+    const countryId = preset.countries.find((id) =>
+      countries.some((c) => c.id === id)
     )
 
-    if (!countryCode) {
+    if (!countryId) {
       console.warn(`No countries found for preset: ${preset.id}`)
       return
     }
 
-    // Get the country
-    const country = selectCountryByCode(countryCode)
+    // Get the country by ID
+    const country = countries.find((c) => c.id === countryId)
     if (!country) {
-      console.warn(`Country not found: ${countryCode}`)
+      console.warn(`Country not found: ${countryId}`)
       return
     }
 
-    // Start animation from country's centroid to target latitude
+    // Select and start animation from country's centroid to target latitude
     const [lng, lat] = country.properties.centroid
     runAnimation(country.id, lng, lat, preset.targetLatitude)
-  }, [cancelAnimation, setActivePreset, countries, selectCountryByCode, runAnimation])
+  }, [cancelAnimation, setActivePreset, countries, runAnimation])
 
   return {
     loadPreset,

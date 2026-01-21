@@ -9,7 +9,7 @@ export interface Preset {
   name: string
   description: string
   emoji: string
-  countries: string[] // ISO A3 codes
+  countries: string[] // Country IDs (e.g., 'GRL', 'USA_ALASKA', 'CAN_MAIN')
   targetLatitude: number
   facts: string[]
 }
@@ -33,7 +33,7 @@ export const PRESETS: Preset[] = [
     name: 'Alaska vs Brazil',
     description: 'They look similar in size, but are they?',
     emoji: '🇺🇸',
-    countries: ['USA'], // Will select Alaska (whole USA for now)
+    countries: ['USA_ALASKA'],
     targetLatitude: -10,
     facts: [
       'Alaska appears as large as Brazil on Mercator maps',
@@ -59,7 +59,7 @@ export const PRESETS: Preset[] = [
     name: 'Africa is Massive',
     description: 'The second-largest continent is often underestimated',
     emoji: '🌍',
-    countries: ['GRL', 'USA', 'CHN', 'IND'], // Countries to compare
+    countries: ['GRL', 'USA_CONT', 'CHN', 'IND'], // Countries to compare
     targetLatitude: 5, // Near equator where Africa is
     facts: [
       'Africa can fit USA, China, India, and Europe combined',
@@ -98,7 +98,7 @@ export const PRESETS: Preset[] = [
     name: 'Canada Reality',
     description: 'The second-largest country... adjusted',
     emoji: '🇨🇦',
-    countries: ['CAN'], // Canada
+    countries: ['CAN_MAIN'],
     targetLatitude: 0,
     facts: [
       'Canada spans 6 time zones',

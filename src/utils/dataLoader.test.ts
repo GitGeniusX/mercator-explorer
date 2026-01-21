@@ -54,10 +54,15 @@ describe('dataLoader', () => {
     it('should include known countries with correct data', async () => {
       const countries = await loadCountries()
 
-      // Check USA
-      const usa = countries.find((c) => c.id === 'USA')
-      expect(usa).toBeDefined()
-      expect(usa!.name).toContain('United States')
+      // Check USA (split into Continental and Alaska)
+      const usaCont = countries.find((c) => c.id === 'USA_CONT')
+      expect(usaCont).toBeDefined()
+      expect(usaCont!.name).toContain('United States')
+      expect(usaCont!.name).toContain('Continental')
+
+      const usaAlaska = countries.find((c) => c.id === 'USA_ALASKA')
+      expect(usaAlaska).toBeDefined()
+      expect(usaAlaska!.name).toContain('Alaska')
 
       // Check Brazil
       const brazil = countries.find((c) => c.id === 'BRA')
@@ -71,6 +76,26 @@ describe('dataLoader', () => {
       expect(greenland!.name).toBe('Greenland')
       // Greenland is ~2.166 million km²
       expect(greenland!.properties.area_km2).toBeGreaterThan(2_000_000)
+    })
+
+    it('should split MultiPolygon countries with large disconnected parts', async () => {
+      const countries = await loadCountries()
+
+      // USA should be split into Continental + Alaska (both > 500k km²)
+      const usaParts = countries.filter((c) => c.isoCode === 'USA')
+      expect(usaParts.length).toBe(2)
+      expect(usaParts.map((c) => c.id).sort()).toEqual(['USA_ALASKA', 'USA_CONT'])
+
+      // Canada should be split into Mainland + Baffin Island
+      const canadaParts = countries.filter((c) => c.isoCode === 'CAN')
+      expect(canadaParts.length).toBe(2)
+      expect(canadaParts.some((c) => c.id === 'CAN_MAIN')).toBe(true)
+      expect(canadaParts.some((c) => c.name.includes('Baffin'))).toBe(true)
+
+      // Russia should NOT be split (only mainland > 500k km²)
+      const russiaParts = countries.filter((c) => c.isoCode === 'RUS')
+      expect(russiaParts.length).toBe(1)
+      expect(russiaParts[0].id).toBe('RUS')
     })
   })
 

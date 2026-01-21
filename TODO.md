@@ -71,28 +71,63 @@ All tasks completed:
 
 ---
 
-## Phase 5: Polish & UX (Next)
+## Phase 5: Polish & UX (In Progress)
 
-### High Priority
-- [ ] Create welcome/tutorial overlay
-- [ ] Add smooth animations (panel transitions, country placement bounce)
-- [ ] Implement keyboard shortcuts (Escape, R for reset, Z for undo, ? for help)
+### Tasks (in order)
 
-### Medium Priority
-- [ ] Implement shareable state via URL parameters
-- [ ] Add loading states and error handling improvements
-- [ ] Accessibility improvements (ARIA labels, focus indicators)
+- [ ] **5.0** Split MultiPolygon countries
+  - Split countries with disconnected landmasses > 500,000 km²
+  - Affects: USA (Continental + Alaska), Canada (Mainland + Baffin Island)
+  - Update dataLoader.ts to detect and split MultiPolygons
+  - Generate meaningful names: "United States (Alaska)", "Canada (Baffin Island)"
+  - Use unique IDs: `USA_ALASKA`, `USA_CONT`, `CAN_BAFFIN`, etc.
 
-### Lower Priority
-- [ ] Add sound effects (optional, off by default)
-- [ ] Performance audit (Lighthouse score > 90)
+- [ ] **5.3** Create control buttons
+  - Reset all placed countries
+  - Undo last placement
+  - Toggle country labels
+  - Toggle latitude lines
+  - Share button (generates URL)
+
+- [ ] **5.4** Implement keyboard shortcuts
+  - Escape: deselect / cancel drag
+  - R: reset all
+  - Z: undo last
+  - ?: show help modal
+
+- [ ] **5.1** Create welcome/tutorial overlay
+  - 4-step onboarding: "Maps lie" → "Click to pick up" → "Drag to equator" → "Try Greenland!"
+  - Store completion in localStorage
+  - Skip button + "Don't show again"
+
+- [ ] **5.6** Implement shareable URL state
+  - URL format: `/?placed=USA_ALASKA:0:20,GRL:-10:0`
+  - Parse on load, place countries at positions
+  - Copy-to-clipboard button
+
+- [ ] **5.2** Polish animations (CSS-based, no new deps)
+  - Panel slide in/out transitions
+  - Country placement bounce
+  - Ghost fade in
+  - Smooth hover transitions
+
+- [ ] **5.9** Performance check
+  - Quick Lighthouse audit
+  - Verify no memory leaks
+  - Target: FCP < 2s, score > 85
+
+### Skipped (out of scope for now)
+- ~~5.5 Sound effects~~ - Low value, adds complexity
+- ~~5.7 Loading states~~ - Current UX is acceptable
+- ~~5.8 Accessibility~~ - Defer to Phase 6
 
 ### Acceptance Criteria
+- [ ] MultiPolygon countries split and independently draggable
 - [ ] Tutorial explains concept clearly
-- [ ] Animations are smooth and purposeful
-- [ ] All controls work correctly
+- [ ] All control buttons work correctly
+- [ ] Keyboard shortcuts functional
 - [ ] Shareable links work
-- [ ] Accessible to keyboard/screen reader users
+- [ ] Animations are smooth (CSS transitions)
 
 ---
 
