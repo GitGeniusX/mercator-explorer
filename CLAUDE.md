@@ -78,6 +78,9 @@ Example: [PHASE-1] feat: implement country selection highlight
 **Starting:** Read `PROJECT_STATUS.md` → Run `npm test -- --run` → Check GitHub issues
 **Ending:** Update status files → Commit → Leave clear handoff notes
 
+### Phase Completion
+**IMPORTANT:** When a phase is finished, ALWAYS commit AND push all changes before starting the next phase.
+
 ## Known Challenges
 
 1. **Leaflet drag on GeoJSON:** No native support - implement custom mouse events
