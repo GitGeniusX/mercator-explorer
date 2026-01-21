@@ -128,6 +128,35 @@ Example: [PHASE-1] feat: implement country selection highlight
 - Use CartoDB tiles for clean look: `https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png`
 - z-index for overlays on Leaflet: use `z-[1000]` or higher in Tailwind
 
+### Mercator Projection Transformation (CRITICAL)
+The Mercator projection handles X and Y axes **differently**:
+
+**Longitude (X-axis):**
+- Linear: `x = R × longitude`
+- Same pixel width per degree at ALL latitudes
+- Does NOT auto-adjust when moving countries
+
+**Latitude (Y-axis):**
+- Nonlinear: `y = R × ln(tan(π/4 + lat/2))`
+- Stretched more at high latitudes
+- Auto-adjusts visual height when coordinates are translated
+
+**When transforming a country from lat₁ to lat₂:**
+- ❌ Scale BOTH dimensions by `cos(lat₁)/cos(lat₂)` → Double compensation, country too small
+- ❌ Scale NEITHER dimension (translate only) → Width still exaggerated, shape distorted
+- ✅ Scale ONLY LONGITUDE by `cos(lat₁)/cos(lat₂)` → Correct size AND shape preserved
+
+**Why longitude-only scaling works:**
+1. Mercator Y-formula automatically reduces height when translating to lower latitude
+2. Longitude scaling removes the E-W exaggeration that Mercator X doesn't handle
+3. Both dimensions end up scaled by the same factor → shape preserved
+4. Area becomes 1/(scale²) of original → true relative size
+
+**Example - Greenland (72°N) to equator (0°):**
+- Longitude scale: `cos(72°)/cos(0°) ≈ 0.31`
+- Height also ~0.31x (from Mercator Y-formula)
+- Area: ~0.31² ≈ 0.096 = 1/10.4 (matches distortion factor at 72°N)
+
 ## Tailwind v4 Setup
 
 Uses `@tailwindcss/vite` plugin (not PostCSS). Configuration is CSS-first:
