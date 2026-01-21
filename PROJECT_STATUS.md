@@ -1,18 +1,19 @@
 # Project Status
 
-## Current Phase: Phase 1 - Core Map & Data ✅ COMPLETE
+## Current Phase: Phase 2 - Projection Mathematics ✅ COMPLETE
 ## Last Updated: 2026-01-21
-## Overall Progress: 8/8 tasks complete
+## Overall Progress: 5/5 tasks complete
 
 ### Completed This Session
-- [x] 1.1 Download Natural Earth 110m GeoJSON data (177 countries)
-- [x] 1.2 TypeScript types verified and ready
-- [x] 1.3 Create data loading utility with Turf.js (centroid, area calculations)
-- [x] 1.4 Implement base Map component with Leaflet + React-Leaflet
-- [x] 1.5 Implement CountryLayer component with hover/click interactions
-- [x] 1.6 Wire up Zustand store with actual data loading
-- [x] 1.7 Wire up App component with map, loading state, and info overlay
-- [x] 1.8 Write comprehensive tests for data loading (12 tests)
+- [x] 2.1 Verify and complete getMercatorScale function
+- [x] 2.2 Verify and complete calculateSizeAdjustment function
+- [x] 2.3 Implement transformCountryToPosition function (polygon transformation)
+- [x] 2.4 Implement findSimilarSizedCountries function
+- [x] 2.5 Write comprehensive unit tests (35 projection tests)
+
+### Additional Functions Implemented
+- `getDistortionAtLatitude` - calculates area distortion at a given latitude
+- `formatArea` - human-readable area formatting (e.g., "2.17M km²")
 
 ### In Progress
 - None
@@ -21,20 +22,29 @@
 - None
 
 ### Next Actions
-1. Begin Phase 2: Projection Mathematics
-2. Implement full Mercator scale calculation (currently skeleton from Phase 0)
-3. Implement polygon transformation functions
-4. Comprehensive unit tests for projection math
+1. Begin Phase 3: Drag & Drop Interaction
+2. Create DraggableCountry component
+3. Implement drag state management in store
+4. Create "lift" animation on selection
 
 ### Acceptance Criteria Status
-- [x] World map displays with all country boundaries
-- [x] Countries highlight on mouse hover
-- [x] Clicking a country logs its name to console + shows info panel
-- [x] Country data includes calculated area and centroid
-- [x] All tests pass (22 tests total)
+- [x] All projection math functions implemented
+- [x] Unit tests cover edge cases (poles, equator, negative latitudes)
+- [x] Tests pass with < 0.01% error margin
+- [x] Functions handle invalid inputs gracefully (clamping at 85°)
+- [x] All 47 tests pass
+- [x] TypeScript compiles without errors
+
+### Test Coverage Summary
+- getMercatorScale: 7 tests (0°, 45°, 60°, 80°, negative lats, clamping, precision)
+- calculateSizeAdjustment: 7 tests (same lat, 70°→0°, 0°→70°, symmetry, hemispheres)
+- getAreaComparison: 4 tests (larger, smaller, true size, thresholds)
+- transformCountryToPosition: 5 tests (non-polygon, centroid, scaling, MultiPolygon, closure)
+- findSimilarSizedCountries: 4 tests (default tolerance, custom tolerance, sorting, empty)
+- getDistortionAtLatitude: 4 tests (equator, 60°, 80°, symmetry)
+- formatArea: 4 tests (millions, thousands, small, edge cases)
 
 ### Notes
-- Using Natural Earth 110m data (177 countries, ~820KB GeoJSON)
-- Smallest country in dataset: Luxembourg (~2400 km²)
-- Bundle size warning for 1.2MB JS chunk (includes GeoJSON data)
-- Could consider lazy loading or code splitting in Phase 5/7
+- Mercator scale clamped at ±85° to avoid infinity at poles
+- Area distortion is square of linear scale (scale² at 60° = 4x, at 80° ≈ 33x)
+- transformCountryToPosition handles both Polygon and MultiPolygon geometries

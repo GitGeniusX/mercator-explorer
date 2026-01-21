@@ -8,43 +8,47 @@ All tasks completed.
 
 ## Phase 1: Core Map & Data ✅ COMPLETE
 
-All tasks completed:
-- [x] Download Natural Earth 110m GeoJSON data
-- [x] Define and validate TypeScript types
-- [x] Create data loading utility with Turf.js
-- [x] Implement base Map component
-- [x] Implement CountryLayer component with hover/click
-- [x] Wire up Zustand store with data loading
-- [x] Wire up App component
-- [x] Write tests for data loading
+All tasks completed.
 
 ---
 
-## Phase 2: Projection Math (Next)
+## Phase 2: Projection Math ✅ COMPLETE
+
+All tasks completed:
+- [x] Implement full Mercator scale calculations
+- [x] Implement polygon transformation function (transformCountryToPosition)
+- [x] Implement area comparison utilities (getAreaComparison, findSimilarSizedCountries)
+- [x] Implement helper utilities (getDistortionAtLatitude, formatArea)
+- [x] Comprehensive unit tests (35 tests, <0.01% error margin)
+- [x] Handle edge cases (poles clamped at ±85°, negative latitudes)
+
+---
+
+## Phase 3: Drag & Drop (Next)
 
 ### High Priority
-- [ ] Implement full Mercator scale calculations (expand skeleton from Phase 0)
-- [ ] Implement polygon transformation function
-- [ ] Implement area comparison utilities
+- [ ] Create DraggableCountry component
+- [ ] Implement drag state management in store
+- [ ] Create "lift" animation on selection
+- [ ] Real-time resize during drag using transformCountryToPosition
 
 ### Medium Priority
-- [ ] Comprehensive unit tests with edge cases
-- [ ] Test transformations with real country geometries
+- [ ] Handle drag end - place country
+- [ ] Implement "ghost" display for original position
+- [ ] Add touch support for mobile
+- [ ] Performance optimization (polygon simplification during drag)
 
 ### Acceptance Criteria
-- [ ] All projection math functions implemented
-- [ ] Unit tests cover edge cases (poles, equator, negative latitudes)
-- [ ] Tests pass with < 0.01% error margin
-- [ ] Functions handle invalid inputs gracefully
+- [ ] Clicking a country "lifts" it visually
+- [ ] Dragging is smooth (60fps)
+- [ ] Country resizes in real-time based on latitude
+- [ ] Releasing places the country at new position
+- [ ] Original position shows ghost outline
+- [ ] Works on touch devices
 
 ---
 
 ## Backlog (Future Phases)
-
-### Phase 3: Drag & Drop
-- [ ] Draggable country component
-- [ ] Real-time resize during drag
-- [ ] Touch support
 
 ### Phase 4: Information Display
 - [ ] InfoPanel component

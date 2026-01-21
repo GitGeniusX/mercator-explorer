@@ -96,3 +96,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Begin Phase 2: Projection Mathematics
 - Implement full Mercator scale calculations
 - Implement polygon transformation function
+
+### Session 3 - 2026-01-21
+**Phase:** 2 - Projection Mathematics
+
+**Completed:**
+- Verified and cleaned up getMercatorScale function (removed TODO)
+- Verified and cleaned up calculateSizeAdjustment function
+- Implemented transformCountryToPosition function
+  - Scales polygon around centroid based on latitude change
+  - Translates to new position
+  - Handles Polygon and MultiPolygon geometries
+- Implemented findSimilarSizedCountries function
+  - Finds countries within tolerance of target area
+  - Sorts by closeness to target
+- Implemented getDistortionAtLatitude utility
+- Implemented formatArea utility for human-readable display
+- Wrote comprehensive unit tests (35 projection tests, 47 total)
+
+**Test Coverage:**
+- getMercatorScale: 7 tests covering 0°, 45°, 60°, 80°, negatives, clamping
+- calculateSizeAdjustment: 7 tests covering same lat, 70°→0°, symmetry
+- getAreaComparison: 4 tests covering all thresholds
+- transformCountryToPosition: 5 tests covering centroid, scaling, MultiPolygon
+- findSimilarSizedCountries: 4 tests covering tolerance and sorting
+- getDistortionAtLatitude: 4 tests
+- formatArea: 4 tests
+
+**Notes:**
+- All tests pass with < 0.01% error margin
+- Latitude clamped at ±85° to avoid infinity at poles
+- Area distortion = scale² (60° → 4x, 80° → 33x)
+
+**Next Session Should:**
+- Begin Phase 3: Drag & Drop Interaction
+- Create DraggableCountry component
+- Implement drag state management
