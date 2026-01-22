@@ -1,17 +1,14 @@
 # Project Status
 
-## Current Phase: Phase 4 - Information Display ✅ COMPLETE
+## Current Phase: Phase 5 - Polish & UX (In Progress)
 ## Last Updated: 2026-01-21
-## Overall Progress: 7/7 tasks complete
+## Overall Progress: 1/7 tasks complete
 
 ### Completed This Session
-- [x] 4.1 Create InfoPanel component with detailed statistics
-- [x] 4.2 Create ComparisonCard component for side-by-side comparison
-- [x] 4.3 Create LatitudeIndicator component for drag feedback
-- [x] 4.4 Create StatsOverlay component with session stats
-- [x] 4.5 Add preset comparisons data (Greenland vs Africa, etc.)
-- [x] 4.6 Implement preset loading with animation
-- [x] 4.7 Style all info components and integrate into App
+- [x] 5.0 Split MultiPolygon countries (>500k km² threshold)
+  - USA → USA_CONT (Continental) + USA_ALASKA (Alaska)
+  - Canada → CAN_MAIN (Mainland) + CAN_BAFFIN (Baffin Island)
+  - Updated presets to use country IDs instead of ISO codes
 
 ### Additional Features Implemented
 - `InfoPanel` - Detailed country statistics with true area, distortion info, similar-sized countries
@@ -40,11 +37,11 @@
 - None
 
 ### Next Actions
-1. Begin Phase 5: Polish & UX
-2. Create welcome/tutorial overlay
-3. Add smooth animations
-4. Implement keyboard shortcuts
-5. Add shareable state via URL
+1. 5.3 Create control buttons (Reset, Undo, Labels, Lat lines, Share)
+2. 5.4 Implement keyboard shortcuts (Esc, R, Z, ?)
+3. 5.1 Create welcome/tutorial overlay
+4. 5.6 Implement shareable URL state
+5. 5.2 Polish animations (CSS-based)
 
 ### Acceptance Criteria Status
 - [x] InfoPanel displays accurate statistics

@@ -5,6 +5,8 @@ import 'leaflet/dist/leaflet.css'
 import { CountryLayer } from './CountryLayer'
 import { DragHandler } from './DragHandler'
 import { InteractiveOverlay } from './InteractiveOverlay'
+import { LatitudeLines } from './LatitudeLines'
+import { CountryLabels } from './CountryLabels'
 
 // World bounds for initial view
 const WORLD_CENTER: [number, number] = [20, 0] // Slightly north for better view
@@ -38,7 +40,9 @@ export function Map({ className }: MapProps) {
         url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
       />
       <ZoomControl position="bottomright" />
+      <LatitudeLines />
       <CountryLayer />
+      <CountryLabels />
       <InteractiveOverlay />
       <DragHandler />
     </MapContainer>

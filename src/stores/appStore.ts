@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AppState, AnimationState } from '@/types'
+import type { AppState, AnimationState, UIState } from '@/types'
 import type { Preset } from '@/data/presets'
 import { loadCountries as loadCountriesData } from '@/utils/dataLoader'
 import { getDistortionAtLatitude } from '@/utils/projection'
@@ -18,6 +18,12 @@ const initialAnimationState: AnimationState = {
   progress: 0,
 }
 
+const initialUIState: UIState = {
+  showLabels: false,
+  showLatitudeLines: false,
+  showHelpModal: false,
+}
+
 export const useAppStore = create<AppState>((set, get) => ({
   // Initial state
   countries: [],
@@ -28,6 +34,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   dragState: initialDragState,
   animationState: initialAnimationState,
   activePreset: null,
+  ui: initialUIState,
 
   // Actions
   loadCountries: async () => {
@@ -84,6 +91,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { placedCountries } = get()
     set({
       placedCountries: placedCountries.filter((_, i) => i !== index),
+    })
+  },
+
+  undoLastPlaced: () => {
+    const { placedCountries } = get()
+    if (placedCountries.length === 0) return
+    set({
+      placedCountries: placedCountries.slice(0, -1),
     })
   },
 
@@ -149,5 +164,24 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setActivePreset: (preset: Preset | null) => {
     set({ activePreset: preset })
+  },
+
+  // UI actions
+  toggleLabels: () => {
+    set((state) => ({
+      ui: { ...state.ui, showLabels: !state.ui.showLabels },
+    }))
+  },
+
+  toggleLatitudeLines: () => {
+    set((state) => ({
+      ui: { ...state.ui, showLatitudeLines: !state.ui.showLatitudeLines },
+    }))
+  },
+
+  setShowHelpModal: (show: boolean) => {
+    set((state) => ({
+      ui: { ...state.ui, showHelpModal: show },
+    }))
   },
 }))

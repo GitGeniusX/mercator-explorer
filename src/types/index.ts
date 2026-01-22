@@ -33,6 +33,12 @@ export interface AnimationState {
   progress: number // 0 to 1
 }
 
+export interface UIState {
+  showLabels: boolean
+  showLatitudeLines: boolean
+  showHelpModal: boolean
+}
+
 export interface AppState {
   // Data
   countries: Country[]
@@ -54,6 +60,9 @@ export interface AppState {
   // Active preset
   activePreset: Preset | null
 
+  // UI state
+  ui: UIState
+
   // Actions
   loadCountries: () => Promise<void>
   selectCountry: (id: string) => void
@@ -61,6 +70,7 @@ export interface AppState {
   clearSelection: () => void
   placeCountry: (countryId: string, position: [number, number]) => void
   removePlacedCountry: (index: number) => void
+  undoLastPlaced: () => void
   startDrag: (countryId: string) => void
   updateDragPosition: (pos: [number, number]) => void
   endDrag: () => void
@@ -70,4 +80,8 @@ export interface AppState {
   updateAnimationProgress: (progress: number) => void
   endAnimation: () => void
   setActivePreset: (preset: Preset | null) => void
+  // UI actions
+  toggleLabels: () => void
+  toggleLatitudeLines: () => void
+  setShowHelpModal: (show: boolean) => void
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 import { Map } from '@/components/Map'
 import {
   InfoPanel,
@@ -7,8 +7,10 @@ import {
   StatsOverlay,
   PresetBanner,
 } from '@/components/InfoPanel'
+import { Controls, HelpModal } from '@/components/Controls'
 import { useAppStore } from '@/stores/appStore'
 import { usePresetAnimation, getAnimatedPosition } from '@/hooks/usePresetAnimation'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 
 function App() {
   const loadCountries = useAppStore((state) => state.loadCountries)
@@ -26,9 +28,25 @@ function App() {
 
   const { loadPreset } = usePresetAnimation()
 
+  // Initialize keyboard shortcuts
+  useKeyboardShortcuts()
+
   useEffect(() => {
     loadCountries()
   }, [loadCountries])
+
+  // Share handler (placeholder - will be implemented in 5.6)
+  const handleShare = useCallback(() => {
+    const url = new URL(window.location.href)
+    const placedData = placedCountries
+      .map((p) => `${p.original.id}:${p.currentPosition[1].toFixed(1)}:${p.currentPosition[0].toFixed(1)}`)
+      .join(',')
+    if (placedData) {
+      url.searchParams.set('placed', placedData)
+    }
+    navigator.clipboard.writeText(url.toString())
+    alert('Link copied to clipboard!')
+  }, [placedCountries])
 
   // Get available country codes for preset filtering
   const availableCountryCodes = useMemo(() =>
@@ -150,7 +168,12 @@ function App() {
           </div>
         )}
 
-        {/* Status bar */}
+        {/* Controls - bottom center */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000]">
+          <Controls onShare={handleShare} />
+        </div>
+
+        {/* Status bar - bottom left */}
         <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 shadow z-[1000]">
           <p className="text-sm text-gray-600">
             <span className="font-medium">{countriesCount}</span> countries
@@ -159,10 +182,13 @@ function App() {
             )}
           </p>
           <p className="text-xs text-gray-400 mt-0.5">
-            Click a country to see its true size
+            Press <kbd className="px-1 bg-gray-100 rounded text-xs">?</kbd> for shortcuts
           </p>
         </div>
       </div>
+
+      {/* Help Modal */}
+      <HelpModal />
     </div>
   )
 }
