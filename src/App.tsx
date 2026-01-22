@@ -8,6 +8,7 @@ import {
   PresetBanner,
 } from '@/components/InfoPanel'
 import { Controls, HelpModal } from '@/components/Controls'
+import { Tutorial } from '@/components/Onboarding'
 import { useAppStore } from '@/stores/appStore'
 import { usePresetAnimation, getAnimatedPosition } from '@/hooks/usePresetAnimation'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
@@ -25,6 +26,8 @@ function App() {
   const activePreset = useAppStore((state) => state.activePreset)
   const reset = useAppStore((state) => state.reset)
   const removePlacedCountry = useAppStore((state) => state.removePlacedCountry)
+  const placeCountry = useAppStore((state) => state.placeCountry)
+  const setShowTutorial = useAppStore((state) => state.setShowTutorial)
 
   const { loadPreset } = usePresetAnimation()
 
@@ -35,7 +38,43 @@ function App() {
     loadCountries()
   }, [loadCountries])
 
-  // Share handler (placeholder - will be implemented in 5.6)
+  // Parse URL parameters and place countries from shared link
+  useEffect(() => {
+    if (countries.length === 0) return
+
+    const url = new URL(window.location.href)
+    const placedParam = url.searchParams.get('placed')
+    if (!placedParam) return
+
+    // Parse format: ID:lat:lng,ID:lat:lng,...
+    const placements = placedParam.split(',')
+    let placedAny = false
+
+    for (const placement of placements) {
+      const [id, latStr, lngStr] = placement.split(':')
+      const lat = parseFloat(latStr)
+      const lng = parseFloat(lngStr)
+
+      if (id && !isNaN(lat) && !isNaN(lng)) {
+        const country = countries.find((c) => c.id === id)
+        if (country) {
+          placeCountry(id, [lng, lat])
+          placedAny = true
+        }
+      }
+    }
+
+    // Skip tutorial if loading shared state
+    if (placedAny) {
+      setShowTutorial(false)
+    }
+
+    // Clear URL params after loading
+    url.searchParams.delete('placed')
+    window.history.replaceState({}, '', url.pathname)
+  }, [countries, placeCountry, setShowTutorial])
+
+  // Share handler - generates URL with placed countries
   const handleShare = useCallback(() => {
     const url = new URL(window.location.href)
     const placedData = placedCountries
@@ -189,6 +228,9 @@ function App() {
 
       {/* Help Modal */}
       <HelpModal />
+
+      {/* Tutorial Overlay */}
+      <Tutorial />
     </div>
   )
 }
