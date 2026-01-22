@@ -137,7 +137,10 @@ All tasks completed:
 ## Phase 7: Deployment (Future)
 
 - [ ] Production build optimization (code splitting for GeoJSON)
-- [ ] Deploy to Vercel/Netlify
+- [ ] Deploy to Azure
+- [ ] Review license terms for application
+- [ ] Review license terms for libraries and code
+- [ ] Calculate Azure running costs, and compare with alternatives
 - [ ] Custom domain (optional)
 - [ ] Monitoring setup (optional)
 
