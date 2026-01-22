@@ -1,36 +1,36 @@
 # Project Status
 
 ## Current Phase: Phase 5 - Polish & UX (In Progress)
-## Last Updated: 2026-01-21
-## Overall Progress: 3/7 tasks complete
+## Last Updated: 2026-01-22
+## Overall Progress: 3/7 Phase 5 tasks complete
 
-### Completed This Session
-- [x] 5.0 Split MultiPolygon countries (>500k km² threshold)
-  - USA → USA_CONT (Continental) + USA_ALASKA (Alaska)
-  - Canada → CAN_MAIN (Mainland) + CAN_BAFFIN (Baffin Island)
+### Completed This Session (Phase 5)
+
+- [x] **5.0** Split MultiPolygon countries (>500k km² threshold)
+  - USA → `USA_CONT` (Continental) + `USA_ALASKA` (Alaska)
+  - Canada → `CAN_MAIN` (Mainland) + `CAN_BAFFIN` (Baffin Island)
   - Updated presets to use country IDs instead of ISO codes
-- [x] 5.3 Control buttons (Reset, Undo, Labels, Lat lines, Share)
-- [x] 5.4 Keyboard shortcuts (Esc, R, Z, L, G, ?)
 
-### Additional Features Implemented
-- `InfoPanel` - Detailed country statistics with true area, distortion info, similar-sized countries
-- `ComparisonCard` - Side-by-side comparison showing original vs new position
-- `LatitudeIndicator` - Real-time feedback during drag showing latitude and distortion
-- `StatsOverlay` - Session statistics with fun facts about Mercator distortion
-- `PresetSelector` - Preset comparison selector with 8 educational presets
-- `usePresetAnimation` hook - Smooth animation for preset demonstrations
-- Animation state in store for coordinated preset playback
-- ISO code tracking for country lookup by preset
+- [x] **5.3** Control buttons
+  - Reset, Undo, Toggle labels, Toggle latitude lines, Share, Help
+  - Clean button bar UI at bottom center of screen
 
-### Preset Comparisons Available
-1. Greenland Reality Check - Shows true size at equator
-2. Alaska vs Brazil - Size comparison
-3. Russia at the Equator - Largest country adjusted
-4. Africa is Massive - Comparing countries that fit inside
-5. Scandinavian Surprise - Northern distortion demo
-6. Things That Fit in Australia - Size perspective
-7. Canada Reality - Second-largest country adjusted
-8. Antarctica Distortion - Extreme polar example
+- [x] **5.4** Keyboard shortcuts
+  - `Esc`: deselect / cancel drag
+  - `R`: reset all
+  - `Z`: undo last
+  - `L`: toggle country labels
+  - `G`: toggle latitude grid
+  - `?`: show help modal
+
+### Additional Improvements
+- Country labels use `turf.centerOfMass()` for better visual positioning
+- Labels centered with CSS `transform: translate(-50%, -50%)`
+- Latitude lines with proper styling:
+  - Equator: red solid line
+  - Arctic/Antarctic circles: blue dashed
+  - Other latitudes: gray dashed
+  - Labels positioned on left side
 
 ### In Progress
 - None
@@ -44,42 +44,62 @@
 3. 5.2 Polish animations (CSS-based)
 4. 5.9 Performance check (Lighthouse audit)
 
-### Acceptance Criteria Status
-- [x] InfoPanel displays accurate statistics
-- [x] Information updates in real-time during drag
-- [x] Preset comparisons work correctly
-- [x] UI is readable and non-intrusive
-- [x] All text is educational and clear
-- [x] Responsive on mobile devices (Tailwind responsive classes)
+### Phase 5 Acceptance Criteria
+- [x] MultiPolygon countries split and independently draggable
+- [ ] Tutorial explains concept clearly
+- [x] All control buttons work correctly
+- [x] Keyboard shortcuts functional
+- [ ] Shareable links work (copy done, parse on load pending)
+- [ ] Animations are smooth (CSS transitions)
 
-### Architecture Decisions
-- Used Zustand for animation state management
-- Preset data stored separately in `src/data/presets.ts`
-- Animation uses requestAnimationFrame with ease-out-cubic easing
-- ISO A3 codes used for country identification in presets
-- Components are modular and reusable
+### New Files (Phase 5)
+- `src/components/Controls/Controls.tsx` - Control button bar
+- `src/components/Controls/HelpModal.tsx` - Keyboard shortcuts modal
+- `src/components/Controls/index.ts`
+- `src/components/Map/LatitudeLines.tsx` - Latitude grid overlay
+- `src/components/Map/CountryLabels.tsx` - Country name labels
+- `src/hooks/useKeyboardShortcuts.ts` - Global keyboard handler
+
+### Modified Files (Phase 5)
+- `src/types/index.ts` - Added UIState, new actions
+- `src/stores/appStore.ts` - Added UI state, undo, toggle actions
+- `src/utils/dataLoader.ts` - MultiPolygon splitting, centerOfMass
+- `src/data/presets.ts` - Updated to use country IDs
+- `src/hooks/usePresetAnimation.ts` - Match by ID instead of isoCode
+- `src/components/Map/Map.tsx` - Added LatitudeLines, CountryLabels
+- `src/App.tsx` - Integrated Controls, HelpModal, keyboard shortcuts
+- `src/index.css` - Tooltip styling for labels
 
 ### Test Status
-- All 47 existing tests pass
-- Projection math tested with < 0.01% error margin
-- Data loading tested with 12 tests
-- Added isoCode to Country type for preset matching
+- All 48 tests pass
+- Projection math: 35 tests
+- Data loading: 13 tests (including MultiPolygon split tests)
 
-### Files Added/Modified
-**New Files:**
-- `src/components/InfoPanel/InfoPanel.tsx`
-- `src/components/InfoPanel/ComparisonCard.tsx`
-- `src/components/InfoPanel/LatitudeIndicator.tsx`
-- `src/components/InfoPanel/StatsOverlay.tsx`
-- `src/components/InfoPanel/PresetSelector.tsx`
-- `src/components/InfoPanel/index.ts`
-- `src/data/presets.ts`
-- `src/hooks/usePresetAnimation.ts`
+---
 
-**Modified Files:**
-- `src/types/index.ts` - Added AnimationState, isoCode, preset-related actions
-- `src/stores/appStore.ts` - Added animation state and preset actions
-- `src/utils/dataLoader.ts` - Added isoCode to country extraction
-- `src/components/Map/InteractiveOverlay.tsx` - Added animation support
-- `src/App.tsx` - Complete rewrite with new info components
-- `src/utils/projection.test.ts` - Added isoCode to mock countries
+## Previous Phases (Complete)
+
+### Phase 4: Information Display ✅
+- InfoPanel, ComparisonCard, LatitudeIndicator, StatsOverlay
+- 8 educational presets with animation
+- usePresetAnimation hook
+
+### Phase 3: Drag & Drop ✅
+- DraggableCountry, GhostCountry, PlacedCountry components
+- Real-time resize during drag
+- Touch support for mobile
+
+### Phase 2: Projection Math ✅
+- Mercator scale calculations
+- Polygon transformation functions
+- Comprehensive unit tests
+
+### Phase 1: Core Map & Data ✅
+- Leaflet map with country boundaries
+- GeoJSON data loading
+- Hover/click interactions
+
+### Phase 0: Project Setup ✅
+- Vite + React + TypeScript
+- Tailwind CSS v4
+- Vitest testing

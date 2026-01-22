@@ -73,27 +73,32 @@ All tasks completed:
 
 ## Phase 5: Polish & UX (In Progress)
 
-### Tasks (in order)
+### Completed Tasks
 
-- [ ] **5.0** Split MultiPolygon countries
+- [x] **5.0** Split MultiPolygon countries
   - Split countries with disconnected landmasses > 500,000 km²
-  - Affects: USA (Continental + Alaska), Canada (Mainland + Baffin Island)
-  - Update dataLoader.ts to detect and split MultiPolygons
-  - Generate meaningful names: "United States (Alaska)", "Canada (Baffin Island)"
-  - Use unique IDs: `USA_ALASKA`, `USA_CONT`, `CAN_BAFFIN`, etc.
+  - USA → `USA_CONT` (Continental) + `USA_ALASKA` (Alaska)
+  - Canada → `CAN_MAIN` (Mainland) + `CAN_BAFFIN` (Baffin Island)
+  - Updated presets to use country IDs instead of ISO codes
 
-- [ ] **5.3** Create control buttons
-  - Reset all placed countries
-  - Undo last placement
-  - Toggle country labels
-  - Toggle latitude lines
-  - Share button (generates URL)
+- [x] **5.3** Create control buttons
+  - Reset, Undo, Toggle labels, Toggle latitude lines, Share, Help
+  - Clean button bar UI at bottom center
 
-- [ ] **5.4** Implement keyboard shortcuts
+- [x] **5.4** Implement keyboard shortcuts
   - Escape: deselect / cancel drag
   - R: reset all
   - Z: undo last
+  - L: toggle labels
+  - G: toggle latitude grid
   - ?: show help modal
+
+### Additional Improvements
+- Country labels use `centerOfMass` for better visual positioning
+- Labels centered with CSS transform
+- Latitude lines with proper styling (Equator red, circles blue, others gray)
+
+### Remaining Tasks
 
 - [ ] **5.1** Create welcome/tutorial overlay
   - 4-step onboarding: "Maps lie" → "Click to pick up" → "Drag to equator" → "Try Greenland!"
@@ -103,7 +108,7 @@ All tasks completed:
 - [ ] **5.6** Implement shareable URL state
   - URL format: `/?placed=USA_ALASKA:0:20,GRL:-10:0`
   - Parse on load, place countries at positions
-  - Copy-to-clipboard button
+  - Copy-to-clipboard button (basic implementation done)
 
 - [ ] **5.2** Polish animations (CSS-based, no new deps)
   - Panel slide in/out transitions
@@ -122,11 +127,11 @@ All tasks completed:
 - ~~5.8 Accessibility~~ - Defer to Phase 6
 
 ### Acceptance Criteria
-- [ ] MultiPolygon countries split and independently draggable
+- [x] MultiPolygon countries split and independently draggable
 - [ ] Tutorial explains concept clearly
-- [ ] All control buttons work correctly
-- [ ] Keyboard shortcuts functional
-- [ ] Shareable links work
+- [x] All control buttons work correctly
+- [x] Keyboard shortcuts functional
+- [ ] Shareable links work (partial - copy works, parse on load pending)
 - [ ] Animations are smooth (CSS transitions)
 
 ---
