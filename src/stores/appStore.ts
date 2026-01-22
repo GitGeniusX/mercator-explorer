@@ -18,10 +18,20 @@ const initialAnimationState: AnimationState = {
   progress: 0,
 }
 
+// Check localStorage for tutorial completion
+const hasCompletedTutorial = (): boolean => {
+  try {
+    return localStorage.getItem('mercator-tutorial-completed') === 'true'
+  } catch {
+    return false
+  }
+}
+
 const initialUIState: UIState = {
   showLabels: false,
   showLatitudeLines: false,
   showHelpModal: false,
+  showTutorial: !hasCompletedTutorial(),
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -183,5 +193,19 @@ export const useAppStore = create<AppState>((set, get) => ({
     set((state) => ({
       ui: { ...state.ui, showHelpModal: show },
     }))
+  },
+
+  setShowTutorial: (show: boolean) => {
+    set((state) => ({
+      ui: { ...state.ui, showTutorial: show },
+    }))
+    // Remember completion in localStorage
+    if (!show) {
+      try {
+        localStorage.setItem('mercator-tutorial-completed', 'true')
+      } catch {
+        // Ignore localStorage errors
+      }
+    }
   },
 }))

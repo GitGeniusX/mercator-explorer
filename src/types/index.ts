@@ -37,6 +37,7 @@ export interface UIState {
   showLabels: boolean
   showLatitudeLines: boolean
   showHelpModal: boolean
+  showTutorial: boolean
 }
 
 export interface AppState {
@@ -84,4 +85,5 @@ export interface AppState {
   toggleLabels: () => void
   toggleLatitudeLines: () => void
   setShowHelpModal: (show: boolean) => void
+  setShowTutorial: (show: boolean) => void
 }
