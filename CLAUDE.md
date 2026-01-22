@@ -59,12 +59,58 @@ src/
 
 ## Development Conventions
 
+### Progress Tracking with GitHub Issues
+**IMPORTANT:** Use GitHub Issues as the primary tracking mechanism for:
+- Bugs discovered during development
+- Feature requests and enhancements
+- Known issues that need future attention
+- UX improvements identified during testing
+
+**When to create issues:**
+- When you find a bug but it's not blocking current work
+- When you identify improvements outside the current phase scope
+- When user feedback suggests changes
+- Before ending a session, review work and create issues for anything not addressed
+
+**Issue workflow:**
+```bash
+gh issue list                    # Check open issues at session start
+gh issue view <number>           # Read issue details before working on it
+gh issue create --title "..." --body "..." --label "bug"
+gh issue close <number> --comment "Fixed in [describe fix]"  # When resolved
+```
+
+**Issue lifecycle:**
+1. **Create** - When bug/improvement identified but not immediately addressed
+2. **Review** - At session start, check `gh issue list` for open items
+3. **Work** - Reference issue number in commits when fixing
+4. **Close** - When resolved, close with comment explaining the fix
+
 ### Status Tracking Files
 Maintain these files in repo root:
 - `PROJECT_STATUS.md` - Current phase, completed tasks, blockers
 - `DECISIONS.md` - Architecture decisions with rationale
 - `CHANGELOG.md` - Session-by-session changes
 - `TODO.md` - Prioritized task list
+
+### Documentation Requirements
+**Document functionality as you build it:**
+1. **Component documentation** - Add JSDoc comments for public interfaces
+2. **Utility functions** - Document parameters, return values, and edge cases
+3. **Architecture updates** - Update this CLAUDE.md when adding new patterns
+4. **API/Data structures** - Document in types/index.ts with comments
+
+**Example:**
+```typescript
+/**
+ * Transforms a country's geometry to a new position, adjusting for Mercator distortion.
+ * @param geometry - Original GeoJSON geometry
+ * @param fromCentroid - Original [lng, lat] centroid
+ * @param toCentroid - Target [lng, lat] position
+ * @returns Transformed geometry at new position with correct size
+ */
+export function transformCountryToPosition(...) { }
+```
 
 ### Commit Messages
 ```
@@ -75,11 +121,60 @@ Example: [PHASE-1] feat: implement country selection highlight
 ```
 
 ### Session Protocol
-**Starting:** Read `PROJECT_STATUS.md` → Run `npm test -- --run` → Check GitHub issues
-**Ending:** Update status files → Commit → Leave clear handoff notes
+
+**Starting a session:**
+1. Read `PROJECT_STATUS.md` to understand current state
+2. Run `npm test -- --run` to verify everything works
+3. Run `gh issue list` to check open issues
+4. Review TODO.md for prioritized tasks
+
+**During the session:**
+- **Commit frequently** - Make local commits after each logical unit of work:
+  - After completing a component or feature
+  - After fixing a bug
+  - After adding tests
+  - Before starting a risky refactor (safety checkpoint)
+  - Rule of thumb: If you'd be upset losing the work, commit it
+- Create GitHub issues for bugs/improvements found but not immediately addressed
+- Close GitHub issues when resolved: `gh issue close <number> --comment "Fixed in [commit]"`
+- Update documentation as you build features
+- Keep CHANGELOG.md updated with significant changes
+
+**Commit frequency guidelines:**
+```bash
+# Small, focused commits are better than large ones
+git add -A && git commit -m "[PHASE-X] feat: add Tutorial component"
+git add -A && git commit -m "[PHASE-X] feat: add URL state parsing"
+git add -A && git commit -m "[PHASE-X] style: add CSS animations"
+
+# Push when: phase complete, end of session, or before risky changes
+git push
+```
+
+**Before commit and push - Learning Summary:**
+1. **Review what was built** - List new files, modified files, new patterns
+2. **Document learnings** - Add any new insights to the Learnings section below
+3. **Update architecture docs** - If component structure changed, update this file
+4. **Create issues** - For anything discovered but not addressed
+5. **Verify tests pass** - `npm run test:run && npm run typecheck`
+
+**Ending a session:**
+1. Update `PROJECT_STATUS.md` with completed work
+2. Update `TODO.md` with completed/new tasks
+3. Update `CHANGELOG.md` with session summary
+4. Close resolved GitHub issues with comments explaining the fix
+5. Create new GitHub issues for any outstanding items discovered
+6. Commit with proper message format
+7. Push changes
+8. Leave clear handoff notes in PROJECT_STATUS.md
 
 ### Phase Completion
-**IMPORTANT:** When a phase is finished, ALWAYS commit AND push all changes before starting the next phase.
+**IMPORTANT:** When a phase is finished:
+1. Verify all acceptance criteria are met
+2. Run full test suite
+3. Update all status files
+4. Create issues for any deferred items
+5. Commit AND push all changes before starting the next phase
 
 ## Known Challenges
 

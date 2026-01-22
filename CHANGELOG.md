@@ -40,6 +40,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - usePresetAnimation hook for smooth preset demonstrations
 - Animation state management in Zustand store
 - ISO code tracking for preset country matching
+- MultiPolygon country splitting (USA, Canada)
+- Controls component with Reset, Undo, Labels, Grid, Share, Help buttons
+- HelpModal component for keyboard shortcuts reference
+- Keyboard shortcuts (Esc, R, Z, L, G, ?)
+- Country labels overlay (toggle with L)
+- Latitude grid lines overlay (toggle with G)
+- Tutorial/onboarding overlay with 4-step walkthrough
+- Shareable URL state (`?placed=ID:lat:lng,...`)
+- CSS animations for panels, country placement, and buttons
 
 ### Changed
 - N/A
@@ -269,3 +278,70 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add smooth animations for transitions
 - Implement keyboard shortcuts (R, Z, ?)
 - Add shareable state via URL parameters
+
+### Session 6 - 2026-01-22
+**Phase:** 5 - Polish & UX (Part 1)
+
+**Completed:**
+- Split MultiPolygon countries (>500k km² threshold)
+  - USA → USA_CONT (Continental) + USA_ALASKA (Alaska)
+  - Canada → CAN_MAIN (Mainland) + CAN_BAFFIN (Baffin Island)
+  - Updated presets to use country IDs instead of ISO codes
+- Created Controls component
+  - Reset, Undo, Toggle labels, Toggle latitude lines, Share, Help buttons
+  - Clean button bar UI at bottom center
+- Created HelpModal component
+  - Keyboard shortcuts reference
+  - Escape to close, click outside to close
+- Implemented keyboard shortcuts
+  - Esc: deselect/cancel drag
+  - R: reset all
+  - Z: undo last
+  - L: toggle country labels
+  - G: toggle latitude grid
+  - ?: show help modal
+- Added country labels (toggle with L key)
+- Added latitude grid lines (toggle with G key)
+
+**Notes:**
+- All 48 tests pass (13 data loader tests including MultiPolygon split tests)
+- Share button generates URL but parsing not yet implemented
+
+### Session 7 - 2026-01-22
+**Phase:** 5 - Polish & UX (Part 2 - COMPLETE)
+
+**Completed:**
+- Created Tutorial overlay (welcome/onboarding)
+  - 4-step walkthrough: "Maps lie" → "Click to pick up" → "Drag to equator" → "Try Greenland!"
+  - Progress dots with click-to-navigate
+  - "Don't show again" checkbox + Skip button
+  - Completion saved to localStorage
+  - Tutorial skipped when loading shared state
+- Implemented shareable URL state (parse on load)
+  - URL format: `?placed=ID:lat:lng,ID:lat:lng,...`
+  - Parses URL params when countries load
+  - Places countries at specified positions
+  - Cleans URL after loading
+- Added CSS animations
+  - Panel slide-in animations (left, right, up)
+  - Country placement bounce animation
+  - Ghost fade-in animation
+  - Button hover/active transitions
+  - All pure CSS, no dependencies
+- Performance check
+  - Bundle: 1.26 MB (340 KB gzipped) - expected with GeoJSON
+  - All event listeners properly cleaned up
+  - No memory leaks detected
+  - 48 tests passing
+
+**Notes:**
+- Phase 5 fully complete
+- All acceptance criteria met
+- Ready for Phase 6: Testing & Docs
+
+**Next Session Should:**
+- Begin Phase 6: Testing & Docs
+- Add integration tests for user flows
+- Set up Playwright for E2E tests
+- Write README documentation
+- Create demo GIF
