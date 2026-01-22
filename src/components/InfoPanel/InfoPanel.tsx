@@ -40,7 +40,7 @@ export function InfoPanel({ country, currentLatitude, isDragging }: InfoPanelPro
   }, [currentDistortion])
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm">
+    <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm animate-slide-in-left">
       {/* Country header */}
       <div className="flex items-start justify-between">
         <div>

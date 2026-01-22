@@ -18,7 +18,7 @@ export function LatitudeIndicator({ latitude, originalLatitude }: LatitudeIndica
   const hemisphere = latitude >= 0 ? 'N' : 'S'
 
   return (
-    <div className="bg-black/80 backdrop-blur-sm text-white rounded-lg px-4 py-3 shadow-xl">
+    <div className="bg-black/80 backdrop-blur-sm text-white rounded-lg px-4 py-3 shadow-xl animate-slide-in-up">
       {/* Current latitude display */}
       <div className="flex items-baseline gap-2">
         <span className="text-3xl font-bold tabular-nums">

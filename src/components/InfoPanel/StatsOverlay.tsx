@@ -45,7 +45,7 @@ export function StatsOverlay({ placedCountries, onReset }: StatsOverlayProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4 max-w-xs">
+    <div className="bg-white rounded-lg shadow-lg p-4 max-w-xs animate-slide-in-right">
       <div className="flex justify-between items-center mb-3">
         <h3 className="font-semibold text-gray-800">Session Stats</h3>
         {onReset && (

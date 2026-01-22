@@ -22,7 +22,7 @@ export function ComparisonCard({ placed, onRemove }: ComparisonCardProps) {
   const isAtTrueSize = newDistortion < 1.1
 
   return (
-    <div className="bg-white rounded-lg shadow border border-gray-100 p-3">
+    <div className="bg-white rounded-lg shadow border border-gray-100 p-3 animate-bounce-in">
       <div className="flex justify-between items-start">
         <h4 className="font-semibold text-gray-800">{original.name}</h4>
         {onRemove && (
