@@ -35,3 +35,21 @@
 .leaflet-container.grabbing {
   cursor: grabbing !important;
 }
+
+/* Subtle latitude line tooltips */
+.latitude-tooltip-subtle {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.latitude-tooltip-subtle::before {
+  display: none !important;
+}
+
+/* Country label markers */
+.country-label {
+  background: transparent !important;
+  border: none !important;
+}

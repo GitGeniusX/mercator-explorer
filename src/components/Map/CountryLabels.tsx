@@ -6,7 +6,7 @@ import { useAppStore } from '@/stores/appStore'
 function createLabelIcon(name: string): L.DivIcon {
   return L.divIcon({
     className: 'country-label',
-    html: `<span class="px-1.5 py-0.5 text-xs font-medium text-gray-700 bg-white/80 rounded shadow-sm whitespace-nowrap">${name}</span>`,
+    html: `<span class="text-[11px] font-medium text-gray-600 whitespace-nowrap drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]" style="transform: translate(-50%, -50%); display: inline-block;">${name}</span>`,
     iconSize: [0, 0],
     iconAnchor: [0, 0],
   })

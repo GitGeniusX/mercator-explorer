@@ -2,13 +2,15 @@
 
 ## Current Phase: Phase 5 - Polish & UX (In Progress)
 ## Last Updated: 2026-01-21
-## Overall Progress: 1/7 tasks complete
+## Overall Progress: 3/7 tasks complete
 
 ### Completed This Session
 - [x] 5.0 Split MultiPolygon countries (>500k km² threshold)
   - USA → USA_CONT (Continental) + USA_ALASKA (Alaska)
   - Canada → CAN_MAIN (Mainland) + CAN_BAFFIN (Baffin Island)
   - Updated presets to use country IDs instead of ISO codes
+- [x] 5.3 Control buttons (Reset, Undo, Labels, Lat lines, Share)
+- [x] 5.4 Keyboard shortcuts (Esc, R, Z, L, G, ?)
 
 ### Additional Features Implemented
 - `InfoPanel` - Detailed country statistics with true area, distortion info, similar-sized countries
@@ -37,11 +39,10 @@
 - None
 
 ### Next Actions
-1. 5.3 Create control buttons (Reset, Undo, Labels, Lat lines, Share)
-2. 5.4 Implement keyboard shortcuts (Esc, R, Z, ?)
-3. 5.1 Create welcome/tutorial overlay
-4. 5.6 Implement shareable URL state
-5. 5.2 Polish animations (CSS-based)
+1. 5.1 Create welcome/tutorial overlay
+2. 5.6 Implement shareable URL state (parse on load)
+3. 5.2 Polish animations (CSS-based)
+4. 5.9 Performance check (Lighthouse audit)
 
 ### Acceptance Criteria Status
 - [x] InfoPanel displays accurate statistics

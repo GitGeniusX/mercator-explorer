@@ -97,8 +97,9 @@ function createCountryFromPolygon(
   nameSuffix?: string
 ): Country {
   const feature = turf.polygon(geometry.coordinates)
-  const centroidPoint = turf.centroid(feature)
-  const centroid: [number, number] = centroidPoint.geometry.coordinates as [number, number]
+  // Use centerOfMass for better visual centering of labels
+  const labelPoint = turf.centerOfMass(feature)
+  const centroid: [number, number] = labelPoint.geometry.coordinates as [number, number]
   const areaKm2 = turf.area(feature) / 1_000_000
 
   const id = idSuffix ? `${properties.ADM0_A3}_${idSuffix}` : properties.ADM0_A3
@@ -134,7 +135,8 @@ function processMultiPolygon(
     const polygon: Polygon = { type: 'Polygon', coordinates: coords }
     const feature = turf.polygon(coords)
     const areaKm2 = turf.area(feature) / 1_000_000
-    const centroid = turf.centroid(feature).geometry.coordinates as [number, number]
+    // Use centerOfMass for better visual centering
+    const centroid = turf.centerOfMass(feature).geometry.coordinates as [number, number]
     parts.push({ polygon, areaKm2, centroid })
   }
 
@@ -147,7 +149,8 @@ function processMultiPolygon(
   // If 0 or 1 significant parts, return as single combined country
   if (significantParts.length <= 1) {
     const combinedFeature = turf.multiPolygon(geometry.coordinates)
-    const centroid = turf.centroid(combinedFeature).geometry.coordinates as [number, number]
+    // Use centerOfMass for better visual centering
+    const centroid = turf.centerOfMass(combinedFeature).geometry.coordinates as [number, number]
     const areaKm2 = turf.area(combinedFeature) / 1_000_000
 
     return [{
